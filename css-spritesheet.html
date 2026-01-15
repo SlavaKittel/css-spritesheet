@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <title>CSS spritesheet</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .frame {
+      width: 100%;     
+      height: 100%; 
+      overflow: hidden;
+    }
+
+    .hud {
+      width: 200px;
+      position:absolute;
+      left: 10px;
+      top: 10px;
+      z-index: 9999;
+      padding: 6px 8px;
+      background:rgb(25, 25, 25);
+      color:rgb(255, 255, 255);
+      font-size: 30px;
+      user-select: none;
+    }
+
+    .sprite {
+      width: calc(100% * 9);
+      height: 100%;
+      background-image: url('spritesheet_coin.png');
+      background-size: 100% 100%;
+      background-position: center;
+      animation: spriteAnimationHorizontal 0.5s steps(9, end) infinite;
+      filter: blur(8px) saturate(12);
+    }
+
+    @keyframes spriteAnimationHorizontal {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+  </style>
+
+  <div class="hud" id="hud"></div>
+  <div class="frame">
+    <div class="sprite"></div>
+  </div>
+
+
+  </head>
+  <script>
+    const hud = document.getElementById('hud')
+
+    let frames = 0;
+    let last = performance.now();
+    let fps = 0;
+
+    function tick(now) {
+      frames++;
+      const dt = now - last;
+      if (dt >= 500) {
+        fps = frames * 1000 / dt;
+        frames = 0;
+        last = now;
+        hud.textContent = `FPS: ${fps.toFixed(2)}`
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  </script>
+</html>
